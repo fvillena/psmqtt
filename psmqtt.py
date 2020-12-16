@@ -233,7 +233,15 @@ if __name__ == '__main__':
     if ssl:
         mqttc.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=paho.ssl.CERT_REQUIRED, tls_version=paho.ssl.PROTOCOL_TLS, ciphers=None)
     
-    mqttc.connect(cf.get('mqtt_broker', 'localhost'), mqtt_port, 60)
+
+    for i in range(100):
+        try:
+           time.sleep(6) 
+           mqttc.connect(cf.get('mqtt_broker', 'localhost'), mqtt_port, 60)
+           break
+        except Exception as e:
+            logging.error(type(e).__name__)
+            continue
 
     # parse schedule
     schedule = cf.get('schedule', {})
